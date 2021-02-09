@@ -17,7 +17,7 @@
 				</a>
 			</div>
 
-			<table class="table table-sm table-borderless table-striped table-hover" id="tbl_resultados">
+			<table id="tbl_resultados" class="table table-hover table-bordered table-striped table-sm texto-12" width="100%" cellspacing="0">
 				<thead>
 					<tr>
 					<th class="text-center" scope="col">Código</th>
