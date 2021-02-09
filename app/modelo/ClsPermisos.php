@@ -57,7 +57,9 @@ class ClsPermisos extends Modelo
 
             $blIniciado = false;
 
-            $strMenu = '';
+            $strMenu = '<li class="nav-item">
+                <a class="nav-link texto-12" aria-current="page" href="/apps/stb8/index.php?p=seguridad/inicio"><i class="fa fa-home"></i> Inicio</a>
+            </li>';
 
             /**
              * Recorrer los permisos de clientes que se encontraron
