@@ -40,7 +40,7 @@
 							<td><?= $arrDatos['datos']['modelo'][$i]['movi_tipo_2'] ?></td>
 							<td><?= $arrDatos['datos']['modelo'][$i]['movi_descripcion'] ?></td>
 							<td><?= $arrDatos['datos']['modelo'][$i]['movi_fecha'] ?></td>
-							<td><?= $arrDatos['datos']['modelo'][$i]['movi_monto'] ?></td>
+							<td>$<?= number_format($arrDatos['datos']['modelo'][$i]['movi_monto'], 0) ?></td>
 						</tr>
 					<? }  ?>
 					</tbody>

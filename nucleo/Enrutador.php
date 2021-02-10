@@ -4,7 +4,10 @@ try
 {
 	if (!isset($_GET['p']) || $_GET['p'] == '')
 		$_GET['p'] = 'usuarios/login';
-
+		
+	if (!isset($_SESSION['usuario']['fk_seg_perfiles']) and $_GET['p'] != 'usuarios/validar')
+		$_GET['p'] = 'usuarios/login';
+		
 	$arrPeticion = explode('/', $_GET['p']);
 
 	// Obtener control
