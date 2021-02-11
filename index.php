@@ -18,6 +18,7 @@ define('ruta_app', 'stb8/app/');
 define('ruta_modelo', 'stb8/app/modelo/');
 define('ruta_control', 'stb8/app/controles/');
 define('ruta_vista', 'stb8/app/vistas/');
+define('titulo', 'Smart Trader 2.0');
 
 //require 'nucleo/Autoload.php';
 require 'nucleo/Recursos.php';
