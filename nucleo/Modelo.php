@@ -93,7 +93,7 @@ class Modelo
 				$modelo->strSentencia .= ' where '.$strFiltro;
 
 			$blDebug = 0;
-			if ($blDebug && $modelo->strTabla == 'tb_seg_usuarios')
+			if ($blDebug && $modelo->strTabla == 'tb_pre_prestamos')
 			{
 				Vista::mostrarVista([
 					'destino' => 'Debug',

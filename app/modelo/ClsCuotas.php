@@ -9,7 +9,7 @@ class ClsCuotas extends Modelo
         $this->strTabla = 'tb_pre_cuotas';
         $this->strPrefijoTabla = 'prcu';
         $this->strLlavePrimaria = 'prcu_codigo';
-        $this->sqlSentencia = 'select 
+        $this->strSentencia = 'select 
             prcu.*,
             esta.esta_descripcion
             from tb_pre_cuotas prcu 

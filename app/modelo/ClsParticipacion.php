@@ -9,7 +9,7 @@ class ClsParticipacion extends Modelo
         $this->strTabla = 'tb_pre_participacion';
         $this->strPrefijoTabla = 'prpa';
         $this->strLlavePrimaria = 'prpa_codigo';
-        $this->sqlSentencia = 'select 
+        $this->strSentencia = 'select 
             prpa.*, 
             inve.inve_nombre,
             inve.inve_apellido,

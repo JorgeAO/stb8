@@ -14,8 +14,6 @@ try
 	$ctrlNombre = 'Ctrl'.ucfirst($arrPeticion[0]);
 	$ctrlRuta = ruta_app.'controles/'.$ctrlNombre.'.php';
 
-	//echo $ctrlRuta; exit();
-
 	// Validar si el control existe
 	if (!file_exists($ctrlRuta))
 		throw new Exception('No se pudo encontrar el control '.$ctrlNombre);
@@ -31,7 +29,7 @@ try
 
 	unset($arrPeticion[0], $arrPeticion[1]);
 
-	if (in_array($mtdNombre, array('editar', 'eliminar')))
+	if (in_array($mtdNombre, array('editar', 'eliminar', 'detalles')))
 		$_POST = $arrPeticion;
 
 	// Validar si el método existe

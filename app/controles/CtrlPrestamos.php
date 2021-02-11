@@ -99,7 +99,7 @@ class CtrlPrestamos extends Control
 			}
 
 			// Insertar el registro del préstamo
-			$arrPrestamo = ClsPrestamos::insertar([
+			$arrPrestamo = $this->strClase::insertar([
 				'fk_par_clientes' => $arrParametros['fk_par_clientes'],
 				'pres_fecha' => $arrParametros['pres_fecha'],
 				'pres_vlr_monto' => $arrParametros['pres_vlr_monto'],
@@ -184,6 +184,45 @@ class CtrlPrestamos extends Control
 		catch (Exception $e) 
 		{
 			throw new Exception('CtrlMovimientos.insertar: '.$e->getMessage());
+		}
+	}
+
+	public function detalles($arrParametros)
+	{
+		try 
+		{
+			// Consultar los préstamos para obtener la información general
+			$arrPrestamos = $this->objModelo->consultar([ 
+				'pres.pres_codigo' => $arrParametros[2] 
+			]);
+
+			// Consultar cuotas
+			$clsCoutas = new ClsCuotas();
+			$arrCuotas = $clsCoutas->consultar([ 
+				'fk_pre_prestamos' => $arrParametros[2] 
+			]);
+
+			// Consultar participación
+			$clsParticipacion = new ClsParticipacion();
+			$arrParticipacion = $clsParticipacion->consultar([ 'fk_pre_prestamos' => $arrParametros[2] ]);
+
+			$arrDatos['prestamo'] = $arrPrestamos;
+			$arrDatos['cuotas'] = $arrCuotas;
+			$arrDatos['participacion'] = $arrParticipacion;
+
+			Vista::mostrarVista([
+				'tipo' => 'vista',
+				'destino' => $this->strVista . 'detalles',
+				'datos' => [
+					'prestamo' => $arrPrestamos,
+					'cuotas' => $arrCuotas,
+					'participacion' => $arrParticipacion,
+				]
+			]);
+		} 
+		catch (Exception $e) 
+		{
+			throw new Exception('CtrlPrestamos.detalles: '.$e->getMessage());
 		}
 	}
 }

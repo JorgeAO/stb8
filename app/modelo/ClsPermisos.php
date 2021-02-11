@@ -93,7 +93,7 @@ class ClsPermisos extends Modelo
                         
                         // Construir opción del menú
                         $strMenu .= '<li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#mod_'.$arrPermisos[$i]['fk_seg_modulos'].'"><i class="fa fa-'.$arrPermisos[$i]['modu_icono'].'"></i> '.$arrPermisos[$i]['modu_descripcion'].'</a>
+                            <a class="nav-link texto-12 dropdown-toggle" data-toggle="dropdown" href="#mod_'.$arrPermisos[$i]['fk_seg_modulos'].'"><i class="fa fa-'.$arrPermisos[$i]['modu_icono'].'"></i> '.$arrPermisos[$i]['modu_descripcion'].'</a>
                             <div class="dropdown-menu" id="mod_'.$arrPermisos[$i]['fk_seg_modulos'].'">';
                         
                         // Marcar el menú como iniciado
@@ -104,7 +104,7 @@ class ClsPermisos extends Modelo
                      * Si la opción tiene enlace, se incluye en el menú
                      */
                     if ($arrPermisos[$i]['opci_enlace'] != '')
-                        $strMenu .= '<a class="dropdown-item texto-gris" href="index.php?p='.$arrPermisos[$i]['opci_enlace'].'">'.$arrPermisos[$i]['opci_nombre'].'</a>';
+                        $strMenu .= '<a class="dropdown-item texto-12" href="index.php?p='.$arrPermisos[$i]['opci_enlace'].'">'.$arrPermisos[$i]['opci_nombre'].'</a>';
                 }
             }
 

@@ -50,10 +50,10 @@
 					<td class="text-center">
 						<a 
 							class="btn btn-sm btn-secondary" 
-							href="index.php?p=prestamo/editar/<?= $arrDatos['datos']['modelo'][$i]['pres_codigo'] ?>" 
-							title="Editar registro"
+							href="index.php?p=prestamos/detalles/<?= $arrDatos['datos']['modelo'][$i]['pres_codigo'] ?>" 
+							title="Detalles del préstamo"
 						>
-							<i class="fa fa-edit"></i>
+							<i class="fa fa-info"></i>
 						</a>
 					</td>
 				</tr>
