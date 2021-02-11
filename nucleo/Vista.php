@@ -22,8 +22,6 @@ class Vista
 		catch (Exception $e) 
 		{
 			throw new Exception($e->getMessage());
-			
-			//$this->mostrarVista($e);
 		}
 	}
 

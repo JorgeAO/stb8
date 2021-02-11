@@ -9,9 +9,8 @@ $arrClientes = $ctrlClientes->listar();
 
 ?>
 
-<!--div class="container"-->
 	<div class="row m-3">
-		<div class="col-sm-12">
+		<div class="col-sm-10 offset-sm-1">
 			<form id="frm_login" action="index.php?p=prestamos/guardar" method="POST">
 				<div class="text-center">
 					<h5>Agregar Préstamo</h5>
@@ -62,7 +61,7 @@ $arrClientes = $ctrlClientes->listar();
                     </div>
                     <div class="row">
                         <div class="form-group col-sm-3">
-                            <button class="btn btn-secondary btn-sm texto-12" id="btn_int_calcular"><i class="fa fa-calculator"></i> Calcular</button>
+                            <button type="button" class="btn btn-secondary btn-sm texto-12" id="btn_int_calcular" onclick="calcular()"><i class="fa fa-calculator"></i> Calcular</button>
                         </div>
                     </div>
 				</div>
@@ -71,7 +70,7 @@ $arrClientes = $ctrlClientes->listar();
 					<button type="submit" class="btn btn-sm btn-secondary" title="Guardar Registro">
 						<i class="fa fa-floppy-o"></i> Guardar
 					</button>
-					<a class="btn btn-sm btn-danger" href="index.php?p=perfiles/index" title="Cancelar">
+					<a class="btn btn-sm btn-danger" href="index.php?p=prestamos/index" title="Cancelar">
 						<i class="fa fa-ban"></i> Cancelar
 					</a>
 				</div>
@@ -87,4 +86,35 @@ $arrClientes = $ctrlClientes->listar();
 			</form>
 		</div>
 	</div>
-<!--/div-->
+
+<script>
+    $(document).ready(function(){
+		$('#pres_fecha').datepicker({
+			format: "yyyy-mm-dd",
+			todayBtn: "linked",
+			language: "es"
+		});
+    });
+
+	function calcular()
+	{
+		enviarPeticion(
+			'prestamos/calcular',
+			{
+				'pres_vlr_monto': $('#pres_vlr_monto').val(),
+				'pres_frecuencia' : $('#pres_frecuencia').val(),
+				'pres_nro_cuotas' : $('#pres_nro_cuotas').val(),
+				'pres_plazo':$('#pres_plazo').val(),
+				'pres_interes':$('#pres_interes').val()
+			},
+			function(rta){
+				if (rta.error == true)
+					alert(rta.mensaje);
+				else
+				{
+					console.info(rta);
+				}
+			}
+		);
+	}
+</script>

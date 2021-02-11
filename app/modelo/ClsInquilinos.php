@@ -7,6 +7,7 @@ class ClsInquilinos extends Modelo
 	function __construct()
 	{
 		$this->strTabla = 'tb_seg_inquilinos';
+		$this->strPrefijoTabla = 'inqu';
 		$this->strCampoId = 'inqu_codigo';
 		$this->strSentencia = 'select '.
 			'inqu.*, '.

@@ -7,14 +7,17 @@ class ClsUsuarios extends Modelo
 	function __construct()
 	{
 		$this->strTabla = 'tb_seg_usuarios';
+		$this->strPrefijoTabla = 'usua';
 		$this->strCampoId = 'usua_codigo';
-		$this->strSentencia = 'select '.
-			'usua.*, '.
-			'perf.perf_descripcion, '.
-			'esta.esta_descripcion '.
-			'from tb_seg_usuarios usua '.
-			'join tb_seg_perfiles perf on (usua.fk_seg_perfiles = perf.perf_codigo) '.
-			'join tb_par_estados esta on (usua.fk_par_estados = esta.esta_codigo)';
+		$this->strSentencia = 'select 
+			usua.*, 
+			perf.perf_descripcion, 
+			inqu.inqu_base_datos,
+			esta.esta_descripcion 
+			from tb_seg_usuarios usua 
+			join tb_seg_perfiles perf on (usua.fk_seg_perfiles = perf.perf_codigo) 
+			left join tb_seg_inquilinos inqu on (usua.fk_seg_inquilinos = inqu.inqu_codigo) 
+			join tb_par_estados esta on (usua.fk_par_estados = esta.esta_codigo)';
 	}
 }
 

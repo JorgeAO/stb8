@@ -9,9 +9,8 @@ require ruta_vista.'seguridad/seguridad/Menu.php';
 
 ?>
 
-<div class="container">
 	<div class="row m-3">
-		<div class="col-sm-12">
+		<div class="col-sm-10 offset-sm-1">
 			<form id="frm_login" action="index.php?p=inversionistas/guardar" method="POST">
 				<div class="text-center">
 					<h5>Agregar Inversionista</h5>
@@ -77,7 +76,6 @@ require ruta_vista.'seguridad/seguridad/Menu.php';
 			</form>
 		</div>
 	</div>
-</div>
 
 <script>
     $(document).ready(function(){

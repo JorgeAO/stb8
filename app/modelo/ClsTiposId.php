@@ -7,6 +7,7 @@ class ClsTiposId extends Modelo
 	function __construct()
 	{
 		$this->strTabla = 'tb_par_tipos_identificacion';
+		$this->strPrefijoTabla = 'tiid';
 		$this->strCampoId = 'tiid_codigo';
 		$this->strSentencia = 'select '.
 			'tiid.*, '.

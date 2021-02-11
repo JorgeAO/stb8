@@ -1,26 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 5.0.4
--- https://www.phpmyadmin.net/
---
--- Servidor: 127.0.0.1
--- Tiempo de generación: 10-02-2021 a las 19:20:27
--- Versión del servidor: 10.4.17-MariaDB
--- Versión de PHP: 8.0.1
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
-SET time_zone = "+00:00";
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
-
---
--- Base de datos: `bd_smarttrader_v8`
---
-
 CREATE DATABASE bd_st_nueva;
 
 USE bd_st_nueva;
@@ -31,7 +8,6 @@ USE bd_st_nueva;
 -- Estructura de tabla para la tabla `tb_caj_movimientos`
 --
 
-DROP TABLE IF EXISTS `tb_caj_movimientos`;
 CREATE TABLE IF NOT EXISTS `tb_caj_movimientos` (
   `movi_codigo` int(11) NOT NULL AUTO_INCREMENT,
   `fk_par_inversionistas` int(11) NOT NULL,
@@ -42,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `tb_caj_movimientos` (
   `fc` datetime NOT NULL,
   `uc` int(11) NOT NULL,
   PRIMARY KEY (`movi_codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -50,7 +26,6 @@ CREATE TABLE IF NOT EXISTS `tb_caj_movimientos` (
 -- Estructura de tabla para la tabla `tb_par_clientes`
 --
 
-DROP TABLE IF EXISTS `tb_par_clientes`;
 CREATE TABLE IF NOT EXISTS `tb_par_clientes` (
   `clie_codigo` int(11) NOT NULL AUTO_INCREMENT,
   `fk_par_tipos_identificacion` int(11) NOT NULL,
@@ -69,7 +44,7 @@ CREATE TABLE IF NOT EXISTS `tb_par_clientes` (
   `um` int(11) DEFAULT NULL,
   PRIMARY KEY (`clie_codigo`),
   UNIQUE KEY `clie_identificacion` (`clie_identificacion`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -77,7 +52,6 @@ CREATE TABLE IF NOT EXISTS `tb_par_clientes` (
 -- Estructura de tabla para la tabla `tb_par_estados`
 --
 
-DROP TABLE IF EXISTS `tb_par_estados`;
 CREATE TABLE IF NOT EXISTS `tb_par_estados` (
   `esta_codigo` int(11) NOT NULL AUTO_INCREMENT,
   `esta_descripcion` varchar(20) NOT NULL,
@@ -102,7 +76,6 @@ INSERT INTO `tb_par_estados` (`esta_codigo`, `esta_descripcion`) VALUES
 -- Estructura de tabla para la tabla `tb_par_inversionistas`
 --
 
-DROP TABLE IF EXISTS `tb_par_inversionistas`;
 CREATE TABLE IF NOT EXISTS `tb_par_inversionistas` (
   `inve_codigo` int(11) NOT NULL AUTO_INCREMENT,
   `inve_identificacion` varchar(30) NOT NULL,
@@ -123,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `tb_par_inversionistas` (
   `um` int(11) DEFAULT NULL,
   PRIMARY KEY (`inve_codigo`),
   UNIQUE KEY `inve_identificacion` (`inve_identificacion`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -131,7 +104,6 @@ CREATE TABLE IF NOT EXISTS `tb_par_inversionistas` (
 -- Estructura de tabla para la tabla `tb_par_tipos_identificacion`
 --
 
-DROP TABLE IF EXISTS `tb_par_tipos_identificacion`;
 CREATE TABLE IF NOT EXISTS `tb_par_tipos_identificacion` (
   `tiid_codigo` int(11) NOT NULL AUTO_INCREMENT,
   `tiid_descripcion` varchar(80) NOT NULL,
@@ -141,7 +113,7 @@ CREATE TABLE IF NOT EXISTS `tb_par_tipos_identificacion` (
   `fm` datetime DEFAULT NULL,
   `um` int(11) DEFAULT NULL,
   PRIMARY KEY (`tiid_codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `tb_par_tipos_identificacion`
@@ -157,7 +129,6 @@ INSERT INTO `tb_par_tipos_identificacion` (`tiid_codigo`, `tiid_descripcion`, `f
 -- Estructura de tabla para la tabla `tb_pre_cuotas`
 --
 
-DROP TABLE IF EXISTS `tb_pre_cuotas`;
 CREATE TABLE IF NOT EXISTS `tb_pre_cuotas` (
   `prcu_codigo` int(11) NOT NULL AUTO_INCREMENT,
   `fk_pre_prestamos` int(11) NOT NULL,
@@ -169,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `tb_pre_cuotas` (
   `prcu_valor_pago` int(11) DEFAULT NULL,
   `fk_par_estados` int(11) NOT NULL DEFAULT 3,
   PRIMARY KEY (`prcu_codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -177,14 +148,13 @@ CREATE TABLE IF NOT EXISTS `tb_pre_cuotas` (
 -- Estructura de tabla para la tabla `tb_pre_participacion`
 --
 
-DROP TABLE IF EXISTS `tb_pre_participacion`;
 CREATE TABLE IF NOT EXISTS `tb_pre_participacion` (
   `prpa_codigo` int(11) NOT NULL AUTO_INCREMENT,
   `fk_pre_prestamos` int(11) NOT NULL,
   `fk_par_inversionistas` int(11) NOT NULL,
   `prpa_porcentaje` decimal(10,2) NOT NULL,
   PRIMARY KEY (`prpa_codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -192,7 +162,6 @@ CREATE TABLE IF NOT EXISTS `tb_pre_participacion` (
 -- Estructura de tabla para la tabla `tb_pre_prestamos`
 --
 
-DROP TABLE IF EXISTS `tb_pre_prestamos`;
 CREATE TABLE IF NOT EXISTS `tb_pre_prestamos` (
   `pres_codigo` int(11) NOT NULL AUTO_INCREMENT,
   `fk_par_clientes` int(11) NOT NULL,
@@ -212,33 +181,7 @@ CREATE TABLE IF NOT EXISTS `tb_pre_prestamos` (
   `fc` datetime NOT NULL,
   `uc` int(11) NOT NULL,
   PRIMARY KEY (`pres_codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tb_seg_dba`
---
-
-DROP TABLE IF EXISTS `tb_seg_dba`;
-CREATE TABLE IF NOT EXISTS `tb_seg_dba` (
-  `dba_codigo` int(11) NOT NULL AUTO_INCREMENT,
-  `dba_id` varchar(20) NOT NULL,
-  `dba_ejecutada` int(11) NOT NULL DEFAULT 0,
-  PRIMARY KEY (`dba_codigo`),
-  UNIQUE KEY `dba_id` (`dba_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
-
---
--- Volcado de datos para la tabla `tb_seg_dba`
---
-
-INSERT INTO `tb_seg_dba` (`dba_codigo`, `dba_id`, `dba_ejecutada`) VALUES
-(1, '20201114_1000', 1),
-(2, '20201114_1006', 1),
-(3, '20201115_1048', 1),
-(4, '20201116_1007', 1),
-(5, '20201120_0704', 1);
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -246,7 +189,6 @@ INSERT INTO `tb_seg_dba` (`dba_codigo`, `dba_id`, `dba_ejecutada`) VALUES
 -- Estructura de tabla para la tabla `tb_seg_modulos`
 --
 
-DROP TABLE IF EXISTS `tb_seg_modulos`;
 CREATE TABLE IF NOT EXISTS `tb_seg_modulos` (
   `modu_codigo` int(11) NOT NULL AUTO_INCREMENT,
   `modu_descripcion` varchar(50) NOT NULL,
@@ -272,7 +214,6 @@ INSERT INTO `tb_seg_modulos` (`modu_codigo`, `modu_descripcion`, `modu_prefijo`,
 -- Estructura de tabla para la tabla `tb_seg_opciones`
 --
 
-DROP TABLE IF EXISTS `tb_seg_opciones`;
 CREATE TABLE IF NOT EXISTS `tb_seg_opciones` (
   `opci_codigo` int(11) NOT NULL,
   `fk_seg_modulos` int(11) NOT NULL,
@@ -305,7 +246,6 @@ INSERT INTO `tb_seg_opciones` (`opci_codigo`, `fk_seg_modulos`, `opci_nombre`, `
 -- Estructura de tabla para la tabla `tb_seg_perfiles`
 --
 
-DROP TABLE IF EXISTS `tb_seg_perfiles`;
 CREATE TABLE IF NOT EXISTS `tb_seg_perfiles` (
   `perf_codigo` int(11) NOT NULL AUTO_INCREMENT,
   `perf_descripcion` varchar(50) NOT NULL,
@@ -316,7 +256,7 @@ CREATE TABLE IF NOT EXISTS `tb_seg_perfiles` (
   `um` int(11) DEFAULT NULL,
   PRIMARY KEY (`perf_codigo`),
   UNIQUE KEY `perf_descripcion` (`perf_descripcion`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `tb_seg_perfiles`
@@ -332,7 +272,6 @@ INSERT INTO `tb_seg_perfiles` (`perf_codigo`, `perf_descripcion`, `fk_par_estado
 -- Estructura de tabla para la tabla `tb_seg_permisos`
 --
 
-DROP TABLE IF EXISTS `tb_seg_permisos`;
 CREATE TABLE IF NOT EXISTS `tb_seg_permisos` (
   `perm_codigo` int(11) NOT NULL AUTO_INCREMENT,
   `fk_seg_perfiles` int(11) NOT NULL,
@@ -344,37 +283,67 @@ CREATE TABLE IF NOT EXISTS `tb_seg_permisos` (
   `perm_d` int(11) NOT NULL DEFAULT 0,
   `perm_l` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`perm_codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=233 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `tb_seg_permisos`
 --
 
 INSERT INTO `tb_seg_permisos` (`perm_codigo`, `fk_seg_perfiles`, `fk_seg_opciones`, `fk_par_estados`, `perm_c`, `perm_r`, `perm_u`, `perm_d`, `perm_l`) VALUES
-(13, 5, 1004, 1, 1, 0, 0, 0, 0),
-(14, 5, 2001, 1, 1, 1, 1, 0, 1),
-(36, 6, 1004, 1, 1, 0, 0, 0, 0),
-(37, 6, 2001, 1, 0, 0, 0, 0, 1),
-(102, 3, 1001, 1, 1, 1, 1, 0, 1),
-(103, 3, 1002, 1, 1, 1, 1, 0, 1),
-(104, 3, 1003, 1, 1, 1, 1, 0, 1),
-(105, 3, 1004, 1, 1, 1, 1, 0, 1),
-(106, 3, 2001, 1, 1, 1, 1, 0, 1),
-(107, 3, 2002, 1, 1, 1, 1, 0, 1),
-(108, 3, 2003, 1, 1, 1, 1, 1, 1),
-(109, 3, 3001, 1, 1, 1, 1, 0, 1),
-(110, 3, 4001, 1, 1, 1, 1, 0, 1),
-(222, 1, 1001, 1, 1, 1, 1, 1, 1),
-(223, 1, 1002, 1, 1, 1, 1, 1, 1),
-(224, 1, 1003, 1, 1, 1, 1, 1, 1),
-(225, 1, 1004, 1, 1, 1, 1, 1, 0),
-(226, 1, 1005, 1, 1, 1, 1, 1, 0),
-(227, 1, 1006, 1, 1, 1, 1, 1, 1),
-(228, 1, 2001, 1, 1, 1, 1, 1, 1),
-(229, 1, 2002, 1, 1, 1, 1, 1, 1),
-(230, 1, 2003, 1, 1, 1, 1, 1, 1),
-(231, 1, 3001, 1, 1, 1, 1, 1, 0),
-(232, 1, 4001, 1, 1, 1, 1, 1, 0);
+  (1, 5, 1004, 1, 1, 0, 0, 0, 0),
+  (2, 5, 2001, 1, 1, 1, 1, 0, 1),
+  (3, 6, 1004, 1, 1, 0, 0, 0, 0),
+  (4, 6, 2001, 1, 0, 0, 0, 0, 1),
+  (5, 3, 1001, 1, 1, 1, 1, 0, 1),
+  (6, 3, 1002, 1, 1, 1, 1, 0, 1),
+  (7, 3, 1003, 1, 1, 1, 1, 0, 1),
+  (8, 3, 1004, 1, 1, 1, 1, 0, 1),
+  (9, 3, 2001, 1, 1, 1, 1, 0, 1),
+  (10, 3, 2002, 1, 1, 1, 1, 0, 1),
+  (11, 3, 2003, 1, 1, 1, 1, 1, 1),
+  (12, 3, 3001, 1, 1, 1, 1, 0, 1),
+  (13, 3, 4001, 1, 1, 1, 1, 0, 1),
+  (14, 1, 1001, 1, 1, 1, 1, 1, 1),
+  (15, 1, 1002, 1, 1, 1, 1, 1, 1),
+  (16, 1, 1003, 1, 1, 1, 1, 1, 1),
+  (17, 1, 1004, 1, 1, 1, 1, 1, 0),
+  (18, 1, 1005, 1, 1, 1, 1, 1, 0),
+  (19, 1, 1006, 1, 1, 1, 1, 1, 1),
+  (20, 1, 2001, 1, 1, 1, 1, 1, 1),
+  (21, 1, 2002, 1, 1, 1, 1, 1, 1),
+  (22, 1, 2003, 1, 1, 1, 1, 1, 1),
+  (23, 1, 3001, 1, 1, 1, 1, 1, 0),
+  (24, 1, 4001, 1, 1, 1, 1, 1, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `tb_seg_usuarios`
+--
+
+CREATE TABLE `tb_seg_usuarios` (
+  `fk_seg_inquilino` int(11) NOT NULL,
+  `usua_codigo` int(11) NOT NULL,
+  `usua_nombre` varchar(50) NOT NULL,
+  `usua_mail` varchar(100) NOT NULL,
+  `usua_login` varchar(20) NOT NULL,
+  `usua_clave` varchar(50) NOT NULL,
+  `fk_seg_perfiles` int(11) NOT NULL,
+  `usua_token` varchar(255) DEFAULT NULL,
+  `usua_vcto_token` datetime DEFAULT NULL,
+  `fk_par_estados` int(11) NOT NULL DEFAULT 1,
+  `fc` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
+  `uc` int(11) NOT NULL,
+  `fm` datetime DEFAULT NULL,
+  `um` smallint(11) DEFAULT NULL,
+  PRIMARY KEY (`usua_codigo`),
+  UNIQUE KEY `usua_login` (`usua_login`),
+  UNIQUE KEY `usua_mail` (`usua_mail`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+INSERT INTO `tb_seg_usuarios` (`fk_seg_inquilino`, `usua_codigo`, `usua_nombre`, `usua_mail`, `usua_login`, `usua_clave`, `fk_seg_perfiles`, `usua_token`, `usua_vcto_token`, `fk_par_estados`, `fc`, `uc`, `fm`, `um`) VALUES 
+  ({{inquilino_id}}, '', 'Root', 'jaguilar.8709@gmail.com', 'jaguilar.8709', '202cb962ac59075b964b07152d234b70', 1, NULL, NULL, 1, '2020-03-17 06:15:00.000000', '', NULL, NULL)
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

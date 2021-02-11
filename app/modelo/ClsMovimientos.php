@@ -7,6 +7,7 @@ class ClsMovimientos extends Modelo
 	function __construct()
 	{
 		$this->strTabla = 'tb_caj_movimientos';
+		$this->strPrefijoTabla = 'movi';
 		$this->strCampoId = 'movi_codigo';
 		$this->strSentencia = 'select 
             movi.*, 

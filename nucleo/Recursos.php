@@ -1,4 +1,5 @@
 <script src="<?= ruta_lib ?>jquery/jquery-3.4.1.min.js"></script>
+<script src="<?= ruta_lib ?>popper/popper.min.js"></script>
 <script src="<?= ruta_lib ?>bootstrap/bootstrap-4.4.1/js/bootstrap.min.js"></script>
 <script src="<?= ruta_lib ?>datatables/DataTables-1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="<?= ruta_lib ?>datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js"></script>

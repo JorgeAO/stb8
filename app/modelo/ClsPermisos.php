@@ -8,6 +8,7 @@ class ClsPermisos extends Modelo
 	function __construct()
 	{
 		$this->strTabla = 'tb_seg_permisos';
+		$this->strPrefijoTabla = 'perm';
 		$this->strCampoId = 'perm_codigo';
 		$this->strSentencia = 'select 
 	        PERM.perm_codigo, PERM.fk_seg_perfiles, PERM.fk_seg_opciones, PERM.perm_c, PERM.perm_r, PERM.perm_u, PERM.perm_d, PERM.perm_l, 

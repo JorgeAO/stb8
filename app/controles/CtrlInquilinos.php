@@ -1,6 +1,7 @@
 <?php
 
 include_once ruta_nucleo.'Control.php';
+include_once ruta_app.'modelo/ClsUsuarios.php';
 
 class Ctrlinquilinos extends Control
 {
@@ -28,25 +29,38 @@ class Ctrlinquilinos extends Control
 
 			if (count($arrInquilino) > 0)
 				throw new Exception('Ya existe la base de datos para otro inquilino');
-
-			// Leer el archivo de base de datos nueva
-			$strNuevaBD = file_get_contents(ruta_raiz.'datos/bd_st_nueva.sql');
-			$strNuevaBD = str_replace('bd_st_nueva', $arrParametros['inqu_base_datos'], $strNuevaBD);
-
-			// Crear la base de datos
-			//$arrResultado = BaseDatos::arrEjecutarSQL('CREATE DATABASE '.$arrParametros['inqu_base_datos'], 'servidor');
-			echo $strNuevaBD;
-			$arrResultado = BaseDatos::arrEjecutarSQL($strNuevaBD, 'servidor');
-
-			echo "<pre>";
-			//print_r($strNuevaBD);
-			print_r($arrResultado);
-			echo "</pre>";
-			exit();
-
+				
 			$arrParametros['fc'] = date('Y-m-d H:i:s');
 			$arrParametros['uc'] = $_SESSION['usuario']['usua_codigo'];
-			$arrResultado = $this->strClase::insertar( $arrParametros );
+			$arrInquilinoNuevo = $this->strClase::insertar( $arrParametros );
+
+			$cnxConexion = new mysqli('localhost', 'root', '', '');
+				
+			// Leer el archivo de base de datos nueva
+			$strNuevaBD = file_get_contents(ruta_raiz.'datos/bd_st_nueva.sql');
+
+			// Reemplazar el nombre de la base de datos por defecto, por el del inquilino
+			$strNuevaBD = str_replace('bd_st_nueva', $arrParametros['inqu_base_datos'], $strNuevaBD);
+			//$strNuevaBD = str_replace('{{inquilino_id}}', $arrInquilinoNuevo['insert_id'], $strNuevaBD);
+			//$strNuevaBD = str_replace('{{inquilino_nombre}}', $arrParametros['inqu_nombre'].' '.$arrParametros['inqu_apellido'], $strNuevaBD);
+			//$strNuevaBD = str_replace('{{inquilino_correo}}', $arrParametros['inqu_correo'], $strNuevaBD);
+			//$strNuevaBD = str_replace('{{inquilino_login}}', strtolower($arrParametros['inqu_nombre']).'.'.strtolower($arrParametros['inqu_apellido']), $strNuevaBD);
+
+			// Crear la base de datos del inquilino
+			/*$arrResultado = $cnxConexion->multi_query($strNuevaBD);
+			if (!$arrResultado)
+				throw new Exception('No se pudo crear la base de datos del inquilino');*/
+
+			$arrResultado = ClsUsuarios::insertar([
+				'fk_seg_inquilinos' => $arrInquilinoNuevo['insert_id'],
+				'usua_nombre' => $arrParametros['inqu_nombre'].' '.$arrParametros['inqu_apellido'],
+				'usua_mail' => $arrParametros['inqu_correo'],
+				'usua_login' => strtolower($arrParametros['inqu_nombre']).'.'.strtolower($arrParametros['inqu_apellido']),
+				'usua_clave' => md5('123'),
+				'fk_seg_perfiles' => 2,
+				'fc' => date('Y-m-d H:i:s'),
+				'uc' => $_SESSION['usuario']['usua_codigo'],
+			]);
 
 			$arrModelo = $this->strClase::consultar();
 

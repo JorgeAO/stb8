@@ -7,6 +7,7 @@ class ClsPerfiles extends Modelo
 	function __construct()
 	{
 		$this->strTabla = 'tb_seg_perfiles';
+		$this->strPrefijoTabla = 'perf';
 		$this->strCampoId = 'perf_codigo';
 		$this->strSentencia = 'select '.
 			'perf.*, '.

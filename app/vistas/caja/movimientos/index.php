@@ -1,8 +1,7 @@
 <?php require ruta_vista.'seguridad/seguridad/Menu.php'; ?>
 
-<div class="container">
 	<div class="row m-3">
-		<div class="col-sm-12">
+		<div class="col-sm-10 offset-sm-1">
 
 			<div class="text-center">
 				<h5>Movimientos</h5>
@@ -40,7 +39,7 @@
 							<td><?= $arrDatos['datos']['modelo'][$i]['movi_tipo_2'] ?></td>
 							<td><?= $arrDatos['datos']['modelo'][$i]['movi_descripcion'] ?></td>
 							<td><?= $arrDatos['datos']['modelo'][$i]['movi_fecha'] ?></td>
-							<td>$<?= number_format($arrDatos['datos']['modelo'][$i]['movi_monto'], 0) ?></td>
+							<td class="text-right">$<?= number_format($arrDatos['datos']['modelo'][$i]['movi_monto'], 0) ?></td>
 						</tr>
 					<? }  ?>
 					</tbody>
@@ -57,7 +56,6 @@
 			<?php } ?>
 		</div>
 	</div>
-</div>
 
 <script>
     $(document).ready(function(){

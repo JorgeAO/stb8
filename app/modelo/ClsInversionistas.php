@@ -7,6 +7,7 @@ class ClsInversionistas extends Modelo
 	function __construct()
 	{
 		$this->strTabla = 'tb_par_inversionistas';
+		$this->strPrefijoTabla = 'inve';
 		$this->strCampoId = 'inve_codigo';
 		$this->strSentencia = 'select 
             inve.*, 

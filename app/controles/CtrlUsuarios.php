@@ -20,6 +20,9 @@ class CtrlUsuarios extends Control
 		{
 			if ($_POST['usua_clave'] != $_POST['usua_clave_2'])
 				throw new Exception('Las contraseñas no coinciden, por favor validar');
+				
+			if ($_SESSION['usuario']['fk_seg_perfiles'] != 1 && $arrParametros['fk_seg_perfiles'] == 1)
+				throw new Exception('No puede crear un usuario de perfil root');
 
 			$arrResultado = $this->strClase::insertar([
 				'usua_nombre' => $_POST['usua_nombre'],
@@ -167,6 +170,24 @@ class CtrlUsuarios extends Control
 			]);
 		} 
 		catch (Exception $e)
+		{
+			throw new Exception($e->getMessage());
+		}
+	}
+	
+	public function salir()
+	{
+		try 
+		{
+			//session_start();
+			session_destroy();
+
+			Vista::mostrarVista([
+				'tipo' => 'vista',
+				'destino' => 'seguridad/seguridad/Login'
+			]);
+		} 
+		catch (Exception $e) 
 		{
 			throw new Exception($e->getMessage());
 		}

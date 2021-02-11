@@ -7,6 +7,7 @@ class ClsPrestamos extends Modelo
 	function __construct()
 	{
 		$this->strTabla = 'tb_pre_prestamos';
+		$this->strPrefijoTabla = 'pres';
 		$this->strCampoId = 'pres_codigo';
 		$this->strSentencia = 'select 
             pres.*, 

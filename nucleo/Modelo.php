@@ -5,12 +5,25 @@ include 'BaseDatos.php';
 class Modelo
 {
 	public $strTabla;
+	public $strPrefijoTabla;
 	public $strCampoId;
 	public $strSentencia;
+	
+	private static $arrTablasInquilino = [
+		'tb_caj_movimientos',
+		'tb_par_clientes',
+		'tb_par_inversionistas',
+		'tb_pre_cuotas',
+		'tb_pre_participacion',
+		'tb_pre_prestamos',
+		'tb_pre_prestamos',
+		'tb_seg_usuarios',
+	];
 
 	function __construct()
 	{
 		$strTabla = '';
+		$strPrefijoTabla = '';
 		$strCampoId = '';
 		$strSentencia = '';
 	}
@@ -21,6 +34,9 @@ class Modelo
 		{
 			$modelo = new static();
 
+			if (in_array($modelo->strTabla, self::$arrTablasInquilino))
+				$arrParametros['fk_seg_inquilinos'] = $_SESSION['usuario']['fk_seg_inquilinos'];
+
 			$sqlSentencia = "insert into ".$modelo->strTabla." set ";
 
 			foreach ($arrParametros as $strCampo => $strValor)
@@ -29,7 +45,7 @@ class Modelo
 			$sqlSentencia = rtrim($sqlSentencia, ', ');
 
 			$blDebug = 0;
-			if ($blDebug && $modelo->strTabla == 'tb_seg_perfiles')
+			if ($blDebug && $modelo->strTabla == 'tb_par_clientes')
 			{
 				Vista::mostrarVista([
 					'destino' => 'Debug',
@@ -57,6 +73,9 @@ class Modelo
 		try 
 		{
 			$modelo = new static();
+
+			if (in_array($modelo->strTabla, self::$arrTablasInquilino) && isset($_SESSION['usuario']))
+				$arrParametros[$modelo->strPrefijoTabla.'.fk_seg_inquilinos'] = $_SESSION['usuario']['fk_seg_inquilinos'];
 
 			$strFiltro = '';
 
@@ -103,6 +122,9 @@ class Modelo
 		{
 			$modelo = new static();
 
+			if (in_array($modelo->strTabla, self::$arrTablasInquilino))
+				$arrParametros['fk_seg_inquilinos'] = $_SESSION['usuario']['fk_seg_inquilinos'];
+
 			$sqlSentencia = "update ".$modelo->strTabla." set ";
 
 			foreach ($arrParametros as $strCampo => $strValor)
@@ -145,12 +167,29 @@ class Modelo
 		{
 			$modelo = new static();
 
+			if (in_array($modelo->strTabla, self::$arrTablasInquilino))
+				$arrParametros['fk_seg_inquilinos'] = $_SESSION['usuario']['fk_seg_inquilinos'];
+
 			$sqlSentencia = "delete from ".$modelo->strTabla." where ";
 
 			foreach ($arrParametros as $strCampo => $strValor)
-				$sqlSentencia .= $strCampo." = '".$strValor."', ";
+				$sqlSentencia .= $strCampo." = '".$strValor."' and ";
 
-			$sqlSentencia = rtrim($sqlSentencia, ', ');
+			$sqlSentencia = rtrim($sqlSentencia, ' and ');
+
+			$blDebug = 0;
+			if ($blDebug && $modelo->strTabla == 'tb_par_clientes')
+			{
+				Vista::mostrarVista([
+					'destino' => 'Debug',
+					'datos' => [
+						'clase' => 'Modelo',
+						'metodo' => 'consultar',
+						'tabla' => $modelo->strTabla,
+						'sentencia' => $sqlSentencia,
+					]
+				]);
+			}
 
 			$arrRta = BaseDatos::arrEjecutarSQL($sqlSentencia);
 

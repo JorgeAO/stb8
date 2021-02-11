@@ -1,8 +1,7 @@
 <?php require ruta_vista.'seguridad/seguridad/Menu.php'; ?>
 
-<div class="container">
 	<div class="row m-3">
-		<div class="col-sm-12">
+		<div class="col-sm-10 offset-sm-1">
 			<div class="text-center">
 				<h5>Clientes</h5>
 			</div>
@@ -48,7 +47,7 @@
 								href="index.php?p=clientes/editar/<?= $arrDatos['datos']['modelo'][$i]['clie_codigo'] ?>" 
 								title="Editar registro"
 							>
-								<i class="fa fa-edit"></i> Editar
+								<i class="fa fa-edit"></i>
 							</a>
 							<a 
 								class="btn btn-sm btn-danger" 
@@ -56,7 +55,7 @@
 								onclick="return confirm('¿Está seguro que desea eliminar el registro?')" 
 								title="Eliminar registro"
 							>
-								<i class="fa fa-trash-o"></i> Eliminar
+								<i class="fa fa-trash-o"></i>
 							</a>
 						</td>
 					</tr>
@@ -74,7 +73,6 @@
 			<?php } ?>
 		</div>
 	</div>
-</div>
 
 <script>
     $(document).ready(function(){
