@@ -22,3 +22,8 @@ html, body, table {
 .texto-12 {
   font-size: 12px;
 }
+
+.texto-error {
+	font-size: 10px;
+	color: red;
+}

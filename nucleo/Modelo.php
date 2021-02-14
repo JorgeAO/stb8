@@ -122,6 +122,9 @@ class Modelo
 		{
 			$modelo = new static();
 
+			if(!isset($_SESSION))
+				session_start();
+
 			if (in_array($modelo->strTabla, self::$arrTablasInquilino))
 				$arrParametros['fk_seg_inquilinos'] = $_SESSION['usuario']['fk_seg_inquilinos'];
 
@@ -137,8 +140,8 @@ class Modelo
 
 			$sqlSentencia .= ' where '.$modelo->strCampoId.' = '.$arrParametros[$modelo->strCampoId];
 
-			$blDebug = 0;
-			if ($blDebug && $modelo->strTabla == 'tb_seg_perfiles')
+			$blDebug = 1;
+			if ($blDebug && $modelo->strTabla == 'tb_pre_cuotas')
 			{
 				Vista::mostrarVista([
 					'destino' => 'Debug',

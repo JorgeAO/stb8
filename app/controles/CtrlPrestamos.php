@@ -225,6 +225,424 @@ class CtrlPrestamos extends Control
 			throw new Exception('CtrlPrestamos.detalles: '.$e->getMessage());
 		}
 	}
+
+	public function pago($arrParametros = [])
+	{
+		try 
+		{
+			// Obtener el código del préstamo----------------------------------
+			$arrCuota = ClsCuotas::consultar([
+				'prcu_codigo' => $arrParametros['cuota'],
+			]);
+			// ----------------------------------------------------------------
+
+
+			// Consultar el préstamo ------------------------------------------
+			$arrPrestamo = ClsPrestamos::consultar([
+				'pres_codigo' => $arrCuota[0]['fk_pre_prestamos'],
+			]);
+			// ----------------------------------------------------------------
+
+
+			// Obtener la participación de los inversionisas ------------------
+			$arrParticipacion = ClsParticipacion::consultar([
+				'fk_pre_prestamos' => $arrCuota[0]['fk_pre_prestamos'],
+			]);
+			// ----------------------------------------------------------------
+
+			// Si está pagando el valor exacto de la cuota
+			if ($arrParametros['tipo'] == 'C')
+			{
+				// Registrar el pago de la cuota ----------------------------------
+				ClsCuotas::actualizar([
+					'prcu_codigo' => $arrParametros['cuota'],
+					'prcu_fecha_pago' => $arrParametros['fecha'],
+					'prcu_valor_pago' => $arrParametros['vlr_cuota'],
+					'fk_par_estados' => 4, 
+				]);
+				// ----------------------------------------------------------------
+
+				// Distribuir ingreso entre los inversionistas --------------------
+				// Recorrer los inversionistas que participaron en el préstamo
+				foreach ($arrParticipacion as $arrPrestamista)
+				{
+					// Calcular el valor ganado en la cuota por el inversionista de acuerdo al 
+					// porcentaje de participación
+					// Valor Ganado = ( Valor Pagado / % Participacion ) * 100
+					$flValorGanado = ($arrParametros['vlr_cuota'] / $arrPrestamista['prpa_porcentaje']) * 100;
+
+					// Consultar la información del inversionista
+					$arrInversionista = ClsInversionistas::consultar([
+						'inve_codigo' => $arrPrestamista['fk_par_inversionistas']
+					]);
+
+					// Sumar el valor ganado por el inversionista a su saldo
+					ClsInversionistas::actualizar([
+						'inve_codigo' => $arrPrestamista['fk_par_inversionistas'],
+						'inve_saldo' => $arrInversionista[0]['inve_saldo'] + $flValorGanado,
+					]);
+					
+					// Insertar movimiento de caja ------------------------------------
+					ClsMovimientos::insertar([
+						'fk_par_inversionistas' => $arrPrestamista['fk_par_inversionistas'],
+						'movi_tipo' => 'E',
+						'movi_descripcion' => 'Pago de la cuota # '.$arrCuota[0]['prcu_numero'].' del prestamo # '.$arrCuota[0]['fk_pre_prestamos'],
+						'movi_fecha' => $arrParametros['fecha'],
+						'movi_monto' => $flValorGanado,
+						'fc' => date('Y-m-d H:m:s'),
+						'uc' => $_SESSION['usuario_sesion'][0]['usua_codigo']
+					]);
+				}
+				// ----------------------------------------------------------------
+				
+				
+				// Recalcular el saldo del préstamo -------------------------------
+				ClsPrestamos::actualizar([
+					'pres_codigo' => $arrPrestamo[0]['pres_codigo'],
+					'pres_vlr_saldo' => ( $arrPrestamo[0]['pres_vlr_saldo'] - $arrParametros['vlr_cuota'] ),
+				]);
+				// ----------------------------------------------------------------
+
+			}
+
+			// Si paga un valor diferente
+			else if ($arrParametros['tipo'] == 'D')
+			{
+				// Si paga menos del valor de la cuota
+				if ($arrParametros['valor'] < $arrParametros['vlr_cuota'])
+				{
+					// Consultar la cuota siguiente
+					$arrCuotaSiguiente = ClsCuotas::consultar([
+						'fk_pre_prestamos' => $arrCuota[0]['fk_pre_prestamos'],
+						'prcu_numero' => ($arrCuota[0]['prcu_numero'] + 1),
+					]);
+
+					// Validar si es la cuota final
+					if (count($arrCuotaSiguiente) == 0)
+						throw new Exception('No se puede recibir un pago inferior al valor de la cuota ya que ésta es la última cuota');
+
+
+					// Registrar el pago de la cuota ----------------------------------
+					ClsCuotas::actualizar([
+						'prcu_codigo' => $arrParametros['cuota'],
+						'prcu_fecha_pago' => $arrParametros['fecha'],
+						'prcu_valor_pago' => $arrParametros['valor'],
+						'fk_par_estados' => 4, 
+						]);
+					// ----------------------------------------------------------------
+
+
+					// Recalcular el valor a pagar de la próxima cuota ----------------
+					// El valor a pagarde la próxima cuota es: 
+					// el valor de la cuota siguiente + el saldo de la cuota actual - el valor que pagó
+					ClsCuotas::actualizar([
+						'prcu_codigo' => $arrCuotaSiguiente[0]['prcu_codigo'],
+						'prcu_vlr_saldo' => ( $arrCuotaSiguiente[0]['prcu_vlr_saldo'] + $arrParametros['vlr_cuota'] - $arrParametros['valor'] ), 
+						]);
+					// ----------------------------------------------------------------
+
+
+					// Distribuir ingreso entre los inversionistas --------------------
+					// Recorrer los inversionistas que participaron en el préstamo
+					foreach ($arrParticipacion as $arrPrestamista)
+					{
+						// Calcular el valor ganado en la cuota por el inversionista de acuerdo al 
+						// porcentaje de participación
+						// Valor Ganado = ( Valor Pagado / % Participacion ) * 100
+						$flValorGanado = ($arrParametros['valor'] / $arrPrestamista['prpa_porcentaje']) * 100;
+
+						// Consultar la información del inversionista
+						$arrInversionista = ClsInversionistas::consultar([
+							'inve_codigo' => $arrPrestamista['fk_par_inversionistas']
+						]);
+
+						// Sumar el valor ganado por el inversionista a su saldo
+						ClsInversionistas::actualizar([
+							'inve_codigo' => $arrPrestamista['fk_par_inversionistas'],
+							'inve_saldo' => $arrInversionista[0]['inve_saldo'] + $flValorGanado,
+						]);
+						
+						// Insertar movimiento de caja ------------------------------------
+						ClsMovimientos::insertar([
+							'fk_par_inversionistas' => $arrPrestamista['fk_par_inversionistas'],
+							'movi_tipo' => 'E',
+							'movi_descripcion' => 'Pago de la cuota # '.$arrCuota[0]['prcu_numero'].' del prestamo # '.$arrCuota[0]['fk_pre_prestamos'],
+							'movi_fecha' => $arrParametros['fecha'],
+							'movi_monto' => $flValorGanado,
+							'fc' => date('Y-m-d H:m:s'),
+							'uc' => $_SESSION['usuario_sesion'][0]['usua_codigo']
+						]);
+					}
+					// ----------------------------------------------------------------
+				}
+
+				// Si paga más del valor de la cuota
+				else if ($arrParametros['valor'] > $arrParametros['vlr_cuota'])
+				{
+					// El valor disponible es lo que el cliente está pagando
+					$dbDisponible = $arrParametros['valor'];
+
+					// Saber qué cuota se va a pagar
+					$intNroCuota = $arrCuota[0]['prcu_numero'];
+
+					while ($dbDisponible > 0)
+					{
+						$arrCuotaSiguiente = ClsCuotas::consultar([
+							'fk_pre_prestamos' => $arrCuota[0]['fk_pre_prestamos'],
+							'prcu_numero' => ($intNroCuota),
+						]);
+
+						// Si el valor disponible es superior al valor de la cuota
+						if ($dbDisponible >= $arrParametros['vlr_cuota'])
+						{
+							// Registrar el pago de la cuota ----------------------------------
+							ClsCuotas::actualizar([
+								'prcu_codigo' => $arrCuotaSiguiente[0]['prcu_codigo'],
+								'prcu_fecha_pago' => $arrParametros['fecha'],
+								'prcu_valor_pago' => $arrParametros['vlr_cuota'],
+								'fk_par_estados' => 4, 
+								]);
+							// ----------------------------------------------------------------
+
+
+							// Distribuir ingreso entre los inversionistas --------------------
+							// Recorrer los inversionistas que participaron en el préstamo
+							foreach ($arrParticipacion as $arrPrestamista)
+							{
+								// Calcular el valor ganado en la cuota por el inversionista de acuerdo al 
+								// porcentaje de participación
+								// Valor Ganado = ( Valor Pagado / % Participacion ) * 100
+								$flValorGanado = ($arrParametros['vlr_cuota'] / $arrPrestamista['prpa_porcentaje']) * 100;
+
+								// Consultar la información del inversionista
+								$arrInversionista = ClsInversionistas::consultar([
+									'inve_codigo' => $arrPrestamista['fk_par_inversionistas']
+								]);
+
+								// Sumar el valor ganado por el inversionista a su saldo
+								ClsInversionistas::actualizar([
+									'inve_codigo' => $arrPrestamista['fk_par_inversionistas'],
+									'inve_saldo' => $arrInversionista[0]['inve_saldo'] + $flValorGanado,
+								]);
+								
+								// Insertar movimiento de caja ------------------------------------
+								ClsMovimientos::insertar([
+									'fk_par_inversionistas' => $arrPrestamista['fk_par_inversionistas'],
+									'movi_tipo' => 'E',
+									'movi_descripcion' => 'Pago de la cuota # '.$arrCuotaSiguiente[0]['prcu_numero'].' del prestamo # '.$arrCuotaSiguiente[0]['fk_pre_prestamos'],
+									'movi_fecha' => $arrParametros['fecha'],
+									'movi_monto' => $flValorGanado,
+									'fc' => date('Y-m-d H:m:s'),
+									'uc' => $_SESSION['usuario_sesion'][0]['usua_codigo']
+								]);
+							}
+							// ----------------------------------------------------------------
+							
+							$dbDisponible -= $arrParametros['vlr_cuota'];
+						}
+
+						// Si el valor disponible es inferior al valor de la cuota
+						else if ($dbDisponible < $arrParametros['vlr_cuota'])
+						{
+							// Recalcular el valor a pagar de la próxima cuota ----------------
+							// El valor a pagarde la próxima cuota es: 
+							// el valor de la cuota siguiente + el saldo de la cuota actual - el valor que pagó
+							ClsCuotas::actualizar([
+								'prcu_codigo' => $arrCuotaSiguiente[0]['prcu_codigo'],
+								'prcu_vlr_saldo' => ( $arrCuotaSiguiente[0]['prcu_vlr_saldo'] - $dbDisponible ), 
+							]);
+							// ----------------------------------------------------------------
+
+
+							// Distribuir ingreso entre los inversionistas --------------------
+							// Recorrer los inversionistas que participaron en el préstamo
+							foreach ($arrParticipacion as $arrPrestamista)
+							{
+								// Calcular el valor ganado en la cuota por el inversionista de acuerdo al 
+								// porcentaje de participación
+								// Valor Ganado = ( Valor Pagado / % Participacion ) * 100
+								$flValorGanado = ($dbDisponible / $arrPrestamista['prpa_porcentaje']) * 100;
+
+								// Consultar la información del inversionista
+								$arrInversionista = ClsInversionistas::consultar([
+									'inve_codigo' => $arrPrestamista['fk_par_inversionistas']
+								]);
+
+								// Sumar el valor ganado por el inversionista a su saldo
+								ClsInversionistas::actualizar([
+									'inve_codigo' => $arrPrestamista['fk_par_inversionistas'],
+									'inve_saldo' => $arrInversionista[0]['inve_saldo'] + $flValorGanado,
+								]);
+								
+								// Insertar movimiento de caja ------------------------------------
+								ClsMovimientos::insertar([
+									'fk_par_inversionistas' => $arrPrestamista['fk_par_inversionistas'],
+									'movi_tipo' => 'E',
+									'movi_descripcion' => 'Pago de la cuota # '.$arrCuota[0]['prcu_numero'].' del prestamo # '.$arrCuota[0]['fk_pre_prestamos'],
+									'movi_fecha' => $arrParametros['fecha'],
+									'movi_monto' => $flValorGanado,
+									'fc' => date('Y-m-d H:m:s'),
+									'uc' => $_SESSION['usuario_sesion'][0]['usua_codigo']
+								]);
+							}
+							// ----------------------------------------------------------------
+							
+							$dbDisponible -= $dbDisponible;
+						}
+
+						$intNroCuota++;
+					}
+				}
+				
+				// Recalcular el saldo del préstamo -------------------------------
+				ClsPrestamos::actualizar([
+					'pres_codigo' => $arrPrestamo[0]['pres_codigo'],
+					'pres_vlr_saldo' => ( $arrPrestamo[0]['pres_vlr_saldo'] - $arrParametros['valor'] ),
+				]);
+				// ----------------------------------------------------------------
+			}
+
+			// Si paga todo
+			else if ($arrParametros['tipo'] == 'T')
+			{
+				// Consultar las cuotas pendientes del préstamo
+				$arrCuotasPendientes = ClsCuotas::consultar([
+					'fk_pre_prestamos' => $arrPrestamo[0]['pres_codigo'],
+					'fk_par_estados' => '3, 5',
+				]);
+
+				// Recorrer las cuotas pendientes
+				foreach ($arrCuotasPendientes as $arrCuotaPagar) 
+				{
+					// Registrar el pago de la cuota ----------------------------------
+					ClsCuotas::actualizar([
+						'prcu_codigo' => $arrCuotaPagar['prcu_codigo'],
+						'prcu_fecha_pago' => $arrParametros['fecha'],
+						'prcu_valor_pago' => $arrCuotaPagar['prcu_vlr_saldo'],
+						'fk_par_estados' => 4, 
+						]);
+					// ----------------------------------------------------------------	
+
+
+					// Distribuir ingreso entre los inversionistas --------------------
+					// Recorrer los inversionistas que participaron en el préstamo
+					foreach ($arrParticipacion as $arrPrestamista)
+					{
+						// Calcular el valor ganado en la cuota por el inversionista de acuerdo al 
+						// porcentaje de participación
+						// Valor Ganado = ( Valor Pagado / % Participacion ) * 100
+						$flValorGanado = ($arrCuotaPagar['prcu_vlr_saldo'] / $arrPrestamista['prpa_porcentaje']) * 100;
+
+						// Consultar la información del inversionista
+						$arrInversionista = ClsInversionistas::consultar([
+							'inve_codigo' => $arrPrestamista['fk_par_inversionistas']
+						]);
+
+						// Sumar el valor ganado por el inversionista a su saldo
+						ClsInversionistas::actualizar([
+							'inve_codigo' => $arrPrestamista['fk_par_inversionistas'],
+							'inve_saldo' => $arrInversionista[0]['inve_saldo'] + $flValorGanado,
+						]);
+						
+						// Insertar movimiento de caja ------------------------------------
+						ClsMovimientos::insertar([
+							'fk_par_inversionistas' => $arrPrestamista['fk_par_inversionistas'],
+							'movi_tipo' => 'E',
+							'movi_descripcion' => 'Pago de la cuota # '.$arrCuotaPagar['prcu_numero'].' del prestamo # '.$arrCuota[0]['fk_pre_prestamos'],
+							'movi_fecha' => $arrParametros['fecha'],
+							'movi_monto' => $flValorGanado,
+							'fc' => date('Y-m-d H:m:s'),
+							'uc' => $_SESSION['usuario_sesion'][0]['usua_codigo']
+						]);
+					}
+					// ----------------------------------------------------------------
+				
+					
+					// Recalcular el saldo del préstamo -------------------------------
+					ClsPrestamos::actualizar([
+						'pres_codigo' => $arrPrestamo[0]['pres_codigo'],
+						'pres_vlr_saldo' => ( $arrPrestamo[0]['pres_vlr_saldo'] - $arrParametros['saldo'] ),
+					]);
+					// ----------------------------------------------------------------
+				}
+			}
+
+			// Si no paga nada
+			else if ($arrParametros['tipo'] == 'N')
+			{
+				// Consultar la cuota siguiente
+				$arrCuotaSiguiente = ClsCuotas::consultar([
+					'fk_pre_prestamos' => $arrCuota[0]['fk_pre_prestamos'],
+					'prcu_numero' => ($arrCuota[0]['prcu_numero'] + 1),
+				]);
+
+				// Validar si es la cuota final
+				if (count($arrCuotaSiguiente) == 0)
+					throw new Exception('No se puede recibir un pago inferior al valor de la cuota ya que ésta es la última cuota');
+
+				// Registrar el pago de la cuota ----------------------------------
+				ClsCuotas::actualizar([
+					'prcu_codigo' => $arrCuota[0]['prcu_codigo'],
+					'prcu_fecha_pago' => $arrParametros['fecha'],
+					'prcu_valor_pago' => 0,
+					'fk_par_estados' => 4, 
+					]);
+				// ----------------------------------------------------------------	
+				
+				// Recalcular el valor a pagar de la próxima cuota ----------------
+				// El valor a pagarde la próxima cuota es: 
+				// el valor de la cuota siguiente + el saldo de la cuota actual
+				ClsCuotas::actualizar([
+					'prcu_codigo' => $arrCuotaSiguiente[0]['prcu_codigo'],
+					'prcu_vlr_saldo' => ( $arrCuotaSiguiente[0]['prcu_vlr_saldo'] + $arrCuota[0]['prcu_vlr_saldo'] ), 
+				]);
+				// ----------------------------------------------------------------
+			}
+
+			// Consultar las cuotas no pagadas del préstamo
+			$arrCuotasNoPagadas = ClsCuotas::consultar([
+				'fk_pre_prestamos' => $arrCuota[0]['fk_pre_prestamos'],
+				'fk_par_estados' => '1,3,5', 
+			]);
+
+			// Validar si no hay más cuotas por pagar
+			if (count($arrCuotasNoPagadas) == 0)
+			{
+				// Si no hay más cuotas por pagar, se marca el préstamo como terminado
+				ClsPrestamos::actualizar([
+					'pres_codigo' => $arrPrestamo[0]['pres_codigo'],
+					'fk_par_estados' => 7,
+				]);
+			}
+
+			// Consultar los préstamos para obtener la información general
+			$arrPrestamos = ClsPrestamos::consultar([ 
+				'pres.pres_codigo' => $arrCuota[0]['fk_pre_prestamos'] 
+			]);
+
+			$arrCuotas = ClsCoutas::consultar([ 
+				'fk_pre_prestamos' => $arrCuota[0]['fk_pre_prestamos'] 
+			]);
+
+			$arrParticipacion = ClsParticipacion::consultar([ 
+				'fk_pre_prestamos' => $arrCuota[0]['fk_pre_prestamos'] 
+			]);
+
+			Vista::mostrarVista([
+				'tipo' => 'vista',
+				'destino' => $this->strVista . 'detalles',
+				'datos' => [
+					'prestamo' => $arrPrestamos,
+					'cuotas' => $arrCuotas,
+					'participacion' => $arrParticipacion,
+				]
+			]);
+		}
+		catch (Exception $e) 
+		{
+			throw new Exception('CtrlPrestamos.pago: '.$e->getMessage());
+		}
+	}
 }
 
 ?>
