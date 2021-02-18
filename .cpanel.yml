@@ -1,0 +1,6 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/eintecsas/public_html/idcreativas.com/apps/stb8/
+    - /bin/cp -R app $DEPLOYPATH
+    - /bin/cp -R nucleo $DEPLOYPATH
