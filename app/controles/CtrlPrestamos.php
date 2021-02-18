@@ -620,23 +620,15 @@ class CtrlPrestamos extends Control
 				'pres.pres_codigo' => $arrCuota[0]['fk_pre_prestamos'] 
 			]);
 
-			$arrCuotas = ClsCoutas::consultar([ 
+			$arrCuotas = ClsCuotas::consultar([ 
 				'fk_pre_prestamos' => $arrCuota[0]['fk_pre_prestamos'] 
 			]);
 
 			$arrParticipacion = ClsParticipacion::consultar([ 
 				'fk_pre_prestamos' => $arrCuota[0]['fk_pre_prestamos'] 
 			]);
-
-			Vista::mostrarVista([
-				'tipo' => 'vista',
-				'destino' => $this->strVista . 'detalles',
-				'datos' => [
-					'prestamo' => $arrPrestamos,
-					'cuotas' => $arrCuotas,
-					'participacion' => $arrParticipacion,
-				]
-			]);
+			
+			return true;
 		}
 		catch (Exception $e) 
 		{

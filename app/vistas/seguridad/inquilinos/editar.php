@@ -76,17 +76,6 @@ $arrEstados = $ctrlEstados->listar();
 							>
 						</div>
 						<div class="form-group col-sm-3">
-							<label>Base de Datos</label>
-							<input 
-								class="form-control form-control-sm" 
-								id="inqu_descripcion" 
-								name="inqu_base_datos" 
-								required="true"
-								type="text" 
-								value="<?=$arrDatos['datos']['modelo'][0]['inqu_base_datos']?>" 
-							>
-						</div>
-						<div class="form-group col-sm-3">
 							<label>Estado</label>
 							<select class="form-control form-control-sm" id="fk_par_estados" name="fk_par_estados" required="true">
 								<?php

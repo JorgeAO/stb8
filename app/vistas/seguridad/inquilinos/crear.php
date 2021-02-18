@@ -34,12 +34,6 @@
                                 <input type="text" class="form-control form-control-sm" id="inqu_correo" name="inqu_correo" required="true">
                             </div>
                         </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                <label>Base de Datos</label>
-                                <input type="text" class="form-control form-control-sm" id="inqu_base_datos" name="inqu_base_datos" required="true">
-                            </div>
-                        </div>
                     </div>
 				</div>
 

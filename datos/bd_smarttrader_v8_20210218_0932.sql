@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.4
+-- version 4.9.1
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 14-02-2021 a las 16:03:03
--- Versión del servidor: 10.4.17-MariaDB
--- Versión de PHP: 8.0.1
+-- Tiempo de generación: 18-02-2021 a las 15:31:50
+-- Versión del servidor: 10.4.8-MariaDB
+-- Versión de PHP: 7.3.10
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -41,21 +42,7 @@ CREATE TABLE IF NOT EXISTS `tb_caj_movimientos` (
   `fc` datetime NOT NULL,
   `uc` int(11) NOT NULL,
   PRIMARY KEY (`movi_codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `tb_caj_movimientos`
---
-
-INSERT INTO `tb_caj_movimientos` (`fk_seg_inquilinos`, `movi_codigo`, `fk_par_inversionistas`, `movi_tipo`, `movi_descripcion`, `movi_fecha`, `movi_monto`, `fc`, `uc`) VALUES
-(0, 84, 7, 'E', 'Capital de ingreso', '2021-02-09 22:10:29', '15000000', '2021-02-09 22:10:29', 1),
-(1, 85, 8, 'E', 'Capital de ingreso', '2021-02-11 12:27:23', '5000000', '2021-02-11 12:27:23', 19),
-(2, 86, 9, 'E', 'Capital de ingreso', '2021-02-11 12:28:02', '6000000', '2021-02-11 12:28:02', 24),
-(2, 87, 9, 'S', 'Participación en el prestamo 6', '2021-02-11 00:00:00', '500000', '2021-02-11 16:02:09', 24),
-(2, 88, 9, 'S', 'Participación en el prestamo 7', '2021-02-11 00:00:00', '500000', '2021-02-11 16:02:28', 24),
-(2, 89, 9, 'E', 'Devolución de préstamos', '2021-02-11 00:00:00', '1500000', '2021-02-11 16:43:51', 24),
-(2, 90, 9, 'S', 'Participación en el prestamo 1', '2021-02-11 00:00:00', '500000', '2021-02-11 16:02:57', 24),
-(2, 91, 9, 'S', 'Participación en el prestamo 2', '2021-02-11 00:00:00', '700000', '2021-02-11 16:02:26', 24);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -83,16 +70,7 @@ CREATE TABLE IF NOT EXISTS `tb_par_clientes` (
   `um` int(11) DEFAULT NULL,
   PRIMARY KEY (`clie_codigo`),
   UNIQUE KEY `clie_identificacion` (`clie_identificacion`,`fk_seg_inquilinos`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `tb_par_clientes`
---
-
-INSERT INTO `tb_par_clientes` (`fk_seg_inquilinos`, `clie_codigo`, `fk_par_tipos_identificacion`, `clie_identificacion`, `clie_nombre`, `clie_apellido`, `clie_correo`, `clie_celular`, `clie_direccion`, `clie_calificacion`, `fk_seg_usuarios`, `fk_par_estados`, `fc`, `uc`, `fm`, `um`) VALUES
-(1, 35, 1, '1130100100', 'Carlos', 'Lopez', NULL, '3101001010', 'Cr 1 # 1 - 1', NULL, NULL, 1, '2021-02-09 22:09:51', 1, '2021-02-11 10:44:52', 19),
-(2, 38, 1, '1112621414', 'Oscar', 'Hincapié', NULL, '3103003030', 'Cr 3 # 3 - 3', NULL, NULL, 1, '2021-02-11 10:40:36', 24, '2021-02-11 12:21:08', 24),
-(2, 39, 1, '1113300300', 'Leidy', 'Silva', NULL, '3104004040', 'Cr 4 # 4 - 4', NULL, NULL, 1, '2021-02-11 12:22:35', 24, NULL, NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -105,7 +83,7 @@ CREATE TABLE IF NOT EXISTS `tb_par_estados` (
   `esta_codigo` int(11) NOT NULL AUTO_INCREMENT,
   `esta_descripcion` varchar(20) NOT NULL,
   PRIMARY KEY (`esta_codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `tb_par_estados`
@@ -117,7 +95,8 @@ INSERT INTO `tb_par_estados` (`esta_codigo`, `esta_descripcion`) VALUES
 (3, 'Pendiente'),
 (4, 'Pagada'),
 (5, 'Atrasada'),
-(6, 'Anulado');
+(6, 'Anulado'),
+(7, 'Terminado');
 
 -- --------------------------------------------------------
 
@@ -147,16 +126,7 @@ CREATE TABLE IF NOT EXISTS `tb_par_inversionistas` (
   `um` int(11) DEFAULT NULL,
   PRIMARY KEY (`inve_codigo`),
   UNIQUE KEY `inve_identificacion` (`inve_identificacion`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `tb_par_inversionistas`
---
-
-INSERT INTO `tb_par_inversionistas` (`fk_seg_inquilinos`, `inve_codigo`, `inve_identificacion`, `fk_par_tipos_identificacion`, `inve_nombre`, `inve_apellido`, `inve_correo`, `inve_telefono`, `inve_celular`, `inve_direccion`, `fk_seg_usuarios`, `inve_saldo`, `inve_saldo_min`, `fk_par_estados`, `fc`, `uc`, `fm`, `um`) VALUES
-(0, 7, '1130200200', 1, 'Inversionista', 'Prueba', NULL, NULL, '3202002020', 'Cra 2 # 2 - 2', NULL, '15000000', NULL, 1, '2021-02-09 22:10:29', 1, NULL, NULL),
-(1, 8, '1130595683', 1, 'Jorge', 'Aguilar', NULL, NULL, '3185572639', 'Cr 3C su # 4E - 16, Piso 2', NULL, '5000000', NULL, 1, '2021-02-11 12:27:23', 19, NULL, NULL),
-(2, 9, '66661645', 1, 'Yuliet', 'Mejía', NULL, NULL, '3105044487', 'Cr 3C SUR # 4E - 16, Piso 2', NULL, '4800000', NULL, 1, '2021-02-11 16:43:51', 24, NULL, NULL);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -203,25 +173,7 @@ CREATE TABLE IF NOT EXISTS `tb_pre_cuotas` (
   `prcu_valor_pago` int(11) DEFAULT NULL,
   `fk_par_estados` int(11) NOT NULL DEFAULT 3,
   PRIMARY KEY (`prcu_codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `tb_pre_cuotas`
---
-
-INSERT INTO `tb_pre_cuotas` (`fk_seg_inquilinos`, `prcu_codigo`, `fk_pre_prestamos`, `prcu_numero`, `prcu_fecha`, `prcu_fecha_pago`, `prcu_valor`, `prcu_vlr_saldo`, `prcu_valor_pago`, `fk_par_estados`) VALUES
-(2, 1, 1, 1, '2021-02-18 00:00:00', NULL, 71900, '71900', NULL, 3),
-(2, 2, 1, 2, '2021-02-25 00:00:00', NULL, 71900, '71900', NULL, 3),
-(2, 3, 1, 3, '2021-03-04 00:00:00', NULL, 71900, '71900', NULL, 3),
-(2, 4, 1, 4, '2021-03-11 00:00:00', NULL, 71900, '71900', NULL, 3),
-(2, 5, 1, 5, '2021-03-18 00:00:00', NULL, 71900, '71900', NULL, 3),
-(2, 6, 1, 6, '2021-03-25 00:00:00', NULL, 71900, '71900', NULL, 3),
-(2, 7, 1, 7, '2021-04-01 00:00:00', NULL, 71900, '71900', NULL, 3),
-(2, 8, 1, 8, '2021-04-08 00:00:00', NULL, 71900, '71900', NULL, 3),
-(2, 9, 2, 1, '2021-03-11 00:00:00', NULL, 301000, '301000', NULL, 3),
-(2, 10, 2, 2, '2021-04-11 00:00:00', NULL, 301000, '301000', NULL, 3),
-(2, 11, 2, 3, '2021-05-11 00:00:00', NULL, 301000, '301000', NULL, 3),
-(2, 12, 2, 4, '2021-06-11 00:00:00', NULL, 301000, '301000', NULL, 3);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -237,15 +189,7 @@ CREATE TABLE IF NOT EXISTS `tb_pre_participacion` (
   `fk_par_inversionistas` int(11) NOT NULL,
   `prpa_porcentaje` decimal(10,2) NOT NULL,
   PRIMARY KEY (`prpa_codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `tb_pre_participacion`
---
-
-INSERT INTO `tb_pre_participacion` (`fk_seg_inquilinos`, `prpa_codigo`, `fk_pre_prestamos`, `fk_par_inversionistas`, `prpa_porcentaje`) VALUES
-(2, 1, 1, 9, '100.00'),
-(2, 2, 2, 9, '100.00');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -274,15 +218,7 @@ CREATE TABLE IF NOT EXISTS `tb_pre_prestamos` (
   `fc` datetime NOT NULL,
   `uc` int(11) NOT NULL,
   PRIMARY KEY (`pres_codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
-
---
--- Volcado de datos para la tabla `tb_pre_prestamos`
---
-
-INSERT INTO `tb_pre_prestamos` (`fk_seg_inquilinos`, `pres_codigo`, `fk_par_clientes`, `pres_tipo`, `pres_fecha`, `pres_vlr_monto`, `pres_frecuencia`, `pres_nro_cuotas`, `pres_plazo`, `pres_interes`, `pres_int_mensual`, `pres_int_total`, `pres_vlr_pago`, `pres_vlr_saldo`, `pres_vlr_cuota`, `fk_par_estados`, `fc`, `uc`) VALUES
-(2, 1, 38, 'C', '2021-02-11 00:00:00', '500000', 'S', 8, 1, 15, '75000', '75000', '575000', '575000', '71900', 1, '2021-02-11 16:02:57', 24),
-(2, 2, 39, 'C', '2021-02-11 00:00:00', '700000', 'M', 4, 4, 18, '126000', '504000', '1204000', '1204000', '301000', 1, '2021-02-11 16:02:26', 24);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -323,23 +259,20 @@ CREATE TABLE IF NOT EXISTS `tb_seg_inquilinos` (
   `inqu_apellido` varchar(100) NOT NULL,
   `inqu_celular` varchar(10) NOT NULL,
   `inqu_correo` varchar(100) NOT NULL,
-  `inqu_base_datos` varchar(100) NOT NULL,
   `fk_par_estados` int(11) NOT NULL DEFAULT 1,
   `fc` datetime DEFAULT NULL,
   `uc` int(11) DEFAULT NULL,
   `fm` datetime DEFAULT NULL,
   `um` int(11) DEFAULT NULL,
-  PRIMARY KEY (`inqu_codigo`),
-  UNIQUE KEY `inqu_base_datos` (`inqu_base_datos`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`inqu_codigo`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `tb_seg_inquilinos`
 --
 
-INSERT INTO `tb_seg_inquilinos` (`inqu_codigo`, `inqu_nombre`, `inqu_apellido`, `inqu_celular`, `inqu_correo`, `inqu_base_datos`, `fk_par_estados`, `fc`, `uc`, `fm`, `um`) VALUES
-(1, 'Gloricet', 'Marin', '3101001010', 'glorimariana@gmail.com', 'bd_st_cliente_1', 1, '2020-12-21 17:04:25', 1, '2020-12-21 18:19:20', 1),
-(2, 'Inquilino', 'Prueba', '3101001010', 'q@q.com', 'bd_st_3', 1, '2021-02-11 09:28:33', 23, '2021-02-11 12:48:49', 1);
+INSERT INTO `tb_seg_inquilinos` (`inqu_codigo`, `inqu_nombre`, `inqu_apellido`, `inqu_celular`, `inqu_correo`, `fk_par_estados`, `fc`, `uc`, `fm`, `um`) VALUES
+(1, 'Yuliet', 'Mejía', '3105044487', 'ymejia1212@gmail.com', 1, '2021-02-18 09:20:23', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -408,7 +341,6 @@ INSERT INTO `tb_seg_opciones` (`opci_codigo`, `fk_seg_modulos`, `opci_nombre`, `
 
 DROP TABLE IF EXISTS `tb_seg_perfiles`;
 CREATE TABLE IF NOT EXISTS `tb_seg_perfiles` (
-  `fk_seg_inquilinos` int(11) NOT NULL,
   `perf_codigo` int(11) NOT NULL AUTO_INCREMENT,
   `perf_descripcion` varchar(50) NOT NULL,
   `fk_par_estados` int(11) NOT NULL DEFAULT 1,
@@ -424,13 +356,13 @@ CREATE TABLE IF NOT EXISTS `tb_seg_perfiles` (
 -- Volcado de datos para la tabla `tb_seg_perfiles`
 --
 
-INSERT INTO `tb_seg_perfiles` (`fk_seg_inquilinos`, `perf_codigo`, `perf_descripcion`, `fk_par_estados`, `fc`, `uc`, `fm`, `um`) VALUES
-(0, 1, 'root', 1, '0000-00-00 00:00:00', 0, NULL, NULL),
-(0, 2, 'Super Usuario', 1, '2020-12-21 18:14:10', 1, NULL, NULL),
-(0, 3, 'Administrador', 1, '2021-02-11 11:05:53', 19, NULL, NULL),
-(0, 4, 'Supervisor', 1, '2021-02-11 11:06:08', 19, NULL, NULL),
-(0, 5, 'Cobrador', 1, '2021-02-11 11:06:16', 19, NULL, NULL),
-(0, 6, 'Cliente', 1, '2021-02-11 11:06:23', 19, NULL, NULL);
+INSERT INTO `tb_seg_perfiles` (`perf_codigo`, `perf_descripcion`, `fk_par_estados`, `fc`, `uc`, `fm`, `um`) VALUES
+(1, 'root', 1, '0000-00-00 00:00:00', 0, NULL, NULL),
+(2, 'Super Usuario', 1, '2020-12-21 18:14:10', 1, NULL, NULL),
+(3, 'Administrador', 1, '2021-02-11 11:05:53', 1, NULL, NULL),
+(4, 'Supervisor', 1, '2021-02-11 11:06:08', 1, NULL, NULL),
+(5, 'Cobrador', 1, '2021-02-11 11:06:16', 1, NULL, NULL),
+(6, 'Cliente', 1, '2021-02-11 11:06:23', 1, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -450,7 +382,7 @@ CREATE TABLE IF NOT EXISTS `tb_seg_permisos` (
   `perm_d` int(11) NOT NULL DEFAULT 0,
   `perm_l` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY (`perm_codigo`)
-) ENGINE=InnoDB AUTO_INCREMENT=263 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=272 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `tb_seg_permisos`
@@ -468,15 +400,6 @@ INSERT INTO `tb_seg_permisos` (`perm_codigo`, `fk_seg_perfiles`, `fk_seg_opcione
 (230, 1, 2003, 1, 1, 1, 1, 1, 1),
 (231, 1, 3001, 1, 1, 1, 1, 1, 0),
 (232, 1, 4001, 1, 1, 1, 1, 1, 0),
-(242, 2, 1001, 1, 1, 1, 0, 0, 1),
-(243, 2, 1002, 1, 1, 1, 1, 1, 1),
-(244, 2, 1003, 1, 1, 1, 0, 0, 0),
-(245, 2, 1004, 1, 1, 1, 1, 0, 0),
-(246, 2, 2001, 1, 1, 1, 1, 1, 1),
-(247, 2, 2002, 1, 1, 1, 1, 1, 1),
-(248, 2, 2003, 1, 1, 1, 1, 1, 1),
-(249, 2, 3001, 1, 1, 1, 1, 1, 1),
-(250, 2, 4001, 1, 1, 1, 1, 1, 1),
 (251, 3, 1001, 1, 1, 1, 0, 0, 1),
 (252, 3, 1002, 1, 1, 1, 1, 0, 1),
 (253, 3, 1003, 1, 1, 1, 1, 0, 1),
@@ -488,7 +411,16 @@ INSERT INTO `tb_seg_permisos` (`perm_codigo`, `fk_seg_perfiles`, `fk_seg_opcione
 (259, 3, 4001, 1, 1, 1, 1, 0, 1),
 (260, 6, 1004, 1, 1, 0, 0, 0, 0),
 (261, 5, 1004, 1, 1, 0, 0, 0, 0),
-(262, 4, 1004, 1, 1, 0, 0, 0, 0);
+(262, 4, 1004, 1, 1, 0, 0, 0, 0),
+(263, 2, 1001, 1, 1, 1, 0, 0, 1),
+(264, 2, 1002, 1, 1, 1, 1, 1, 1),
+(265, 2, 1003, 1, 1, 1, 0, 0, 0),
+(266, 2, 1004, 1, 1, 1, 1, 0, 0),
+(267, 2, 2001, 1, 1, 1, 1, 1, 1),
+(268, 2, 2002, 1, 1, 1, 1, 1, 1),
+(269, 2, 2003, 1, 1, 1, 1, 1, 1),
+(270, 2, 3001, 1, 1, 1, 1, 1, 1),
+(271, 2, 4001, 1, 1, 1, 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -515,7 +447,7 @@ CREATE TABLE IF NOT EXISTS `tb_seg_usuarios` (
   PRIMARY KEY (`usua_codigo`),
   UNIQUE KEY `usua_login` (`usua_login`,`fk_seg_inquilinos`) USING BTREE,
   UNIQUE KEY `usua_mail` (`usua_mail`,`fk_seg_inquilinos`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 --
 -- Volcado de datos para la tabla `tb_seg_usuarios`
@@ -523,9 +455,7 @@ CREATE TABLE IF NOT EXISTS `tb_seg_usuarios` (
 
 INSERT INTO `tb_seg_usuarios` (`fk_seg_inquilinos`, `usua_codigo`, `usua_nombre`, `usua_mail`, `usua_login`, `usua_clave`, `fk_seg_perfiles`, `usua_token`, `usua_vcto_token`, `fk_par_estados`, `fc`, `uc`, `fm`, `um`) VALUES
 (0, 1, 'Usuario Root', 'jaguilar.8709@gmail.com', 'root', '698d51a19d8a121ce581499d7b701668', 1, '', '2020-09-10 17:49:55', 1, '2017-07-01 10:00:00', 0, '2020-09-10 17:09:05', 1),
-(1, 19, 'Gloris Marin', 'glorimariana@gmail.com', 'gmarin', '202cb962ac59075b964b07152d234b70', 2, NULL, NULL, 1, '2020-09-10 17:09:00', 1, NULL, NULL),
-(2, 24, 'Inquilino Prueba', 'q@q.com', 'inq.pru', '202cb962ac59075b964b07152d234b70', 2, NULL, NULL, 1, '2021-02-11 09:28:34', 23, NULL, NULL),
-(1, 26, 'Administrador Prueba', 'admin@st1.com', 'admin.st1', '202cb962ac59075b964b07152d234b70', 3, NULL, NULL, 1, '2021-02-11 12:18:51', 19, '2021-02-11 17:31:06', 19);
+(1, 2, 'Yuliet Mejía', 'ymejia1212@gmail.com', 'yuliet.mej??a', '202cb962ac59075b964b07152d234b70', 2, NULL, NULL, 1, '2021-02-18 09:20:23', 1, NULL, NULL);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

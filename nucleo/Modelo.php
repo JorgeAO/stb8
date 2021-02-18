@@ -2,6 +2,7 @@
 
 include 'BaseDatos.php';
 
+
 class Modelo
 {
 	public $strTabla;
@@ -34,7 +35,7 @@ class Modelo
 		{
 			$modelo = new static();
 
-			if (in_array($modelo->strTabla, self::$arrTablasInquilino))
+			if (in_array($modelo->strTabla, self::$arrTablasInquilino) && $_SESSION['usuario']['fk_seg_perfiles'] != 1)
 				$arrParametros['fk_seg_inquilinos'] = $_SESSION['usuario']['fk_seg_inquilinos'];
 
 			$sqlSentencia = "insert into ".$modelo->strTabla." set ";
@@ -45,13 +46,14 @@ class Modelo
 			$sqlSentencia = rtrim($sqlSentencia, ', ');
 
 			$blDebug = 0;
-			if ($blDebug && $modelo->strTabla == 'tb_par_clientes')
+			if ($blDebug && $modelo->strTabla == 'tb_seg_usuarios')
 			{
 				Vista::mostrarVista([
 					'destino' => 'Debug',
 					'datos' => [
 						'clase' => 'Modelo',
 						'metodo' => 'consultar',
+						'parametros' => $arrParametros,
 						'tabla' => $modelo->strTabla,
 						'sentencia' => $sqlSentencia,
 					]
@@ -74,7 +76,10 @@ class Modelo
 		{
 			$modelo = new static();
 
-			if (in_array($modelo->strTabla, self::$arrTablasInquilino) && isset($_SESSION['usuario']))
+			if (
+				in_array($modelo->strTabla, self::$arrTablasInquilino) 
+				&& isset($_SESSION['usuario']) && 
+				$_SESSION['usuario']['fk_seg_perfiles'] != 1)
 				$arrParametros[$modelo->strPrefijoTabla.'.fk_seg_inquilinos'] = $_SESSION['usuario']['fk_seg_inquilinos'];
 
 			$strFiltro = '';
@@ -84,7 +89,12 @@ class Modelo
 				if (is_numeric($strValor) && $strValor != 0)
 					$strFiltro .= $strCampo." = ".$strValor." and ";
 				elseif (is_string($strValor) && $strValor != '') 
-					$strFiltro .= $strCampo." = '".$strValor."' and ";
+				{
+					if (strpos($strValor, ','))
+						$strFiltro .= $strCampo.' in ('.$strValor.') and ';
+					else
+						$strFiltro .= $strCampo." = '".$strValor."' and ";
+				}
 			}
 
 			$strFiltro = rtrim($strFiltro, ' and ');
@@ -93,7 +103,7 @@ class Modelo
 				$modelo->strSentencia .= ' where '.$strFiltro;
 
 			$blDebug = 0;
-			if ($blDebug && $modelo->strTabla == 'tb_pre_prestamos')
+			if ($blDebug && $modelo->strTabla == 'tb_seg_usuarios')
 			{
 				Vista::mostrarVista([
 					'destino' => 'Debug',
@@ -140,7 +150,7 @@ class Modelo
 
 			$sqlSentencia .= ' where '.$modelo->strCampoId.' = '.$arrParametros[$modelo->strCampoId];
 
-			$blDebug = 1;
+			$blDebug = 0;
 			if ($blDebug && $modelo->strTabla == 'tb_pre_cuotas')
 			{
 				Vista::mostrarVista([

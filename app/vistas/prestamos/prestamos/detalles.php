@@ -151,7 +151,7 @@ require ruta_vista.'seguridad/seguridad/Menu.php';
                             <td><?= $arrDatos['datos']['cuotas'][$i]['esta_descripcion'] ?></td>
                             <td class="text-center">
                                 <button type="button" class="btn btn-secondary btn-sm texto-12" id="btn_int_calcular" title="Registrar Pago" 
-                                    onclick="registrarPago(<?= $arrDatos['datos']['cuotas'][$i]['prcu_codigo'] ?>, '$<?= number_format($arrDatos['datos']['cuotas'][$i]['prcu_vlr_saldo'], 0) ?>', '$<?= number_format($arrDatos['datos']['prestamo'][0]['pres_vlr_saldo'], 0) ?>')">
+                                    onclick="registrarPago(<?= $arrDatos['datos']['cuotas'][$i]['prcu_codigo'] ?>, <?= $arrDatos['datos']['cuotas'][$i]['prcu_vlr_saldo'] ?>, <?= $arrDatos['datos']['prestamo'][0]['pres_vlr_saldo'] ?>)">
                                     <i class="fa fa-usd"></i>
                                 </button>
                             </td>
@@ -165,7 +165,7 @@ require ruta_vista.'seguridad/seguridad/Menu.php';
 
     <div class="col-sm-12">
         <div>
-            <a class="btn btn-sm btn-danger" href="index.php?p=perfiles/index" title="Cancelar">
+            <a class="btn btn-sm btn-danger" href="index.php?p=prestamos/index" title="Cancelar">
                 <i class="fa fa-arrow-left"></i> Volver
             </a>
         </div>
@@ -231,7 +231,9 @@ require ruta_vista.'seguridad/seguridad/Menu.php';
 </div>
 
 <script type="text/javascript">
-	$(document).ready(function(){
+    var couta, vlr_cuota, vlr_saldo;
+	
+    $(document).ready(function(){
         
         $('#pc_pago_fecha').datepicker({
 			format: "yyyy-mm-dd",
@@ -267,20 +269,18 @@ require ruta_vista.'seguridad/seguridad/Menu.php';
 				enviarPeticion(
 					'prestamos/pago',
 					{
-						'cuota':$('#pc_prcu_codigo')[0].innerText,
-						'vlr_cuota':$('#pc_prcu_valor')[0].innerText,
-						'saldo':$('#pc_pres_vlr_saldo')[0].innerText,
+						'cuota':cuota,
+						'vlr_cuota':vlr_cuota,
+						'saldo':vlr_saldo,
 						'fecha':$('#pc_pago_fecha').val(),
 						'tipo':$('#pc_tipo_pago').val(),
 						'valor':$('#pc_vlr_pago').val(),
 					}, 
 					function(rta){
-						alert(rta.mensaje);
-
-						$('#div_mensaje').html('');
+                        $('#div_mensaje').html('');
 						$('#btn_aceptar').attr("disabled", false);
 						
-						if (rta.tipo == 'exito')
+						if (rta.datos == true)
 							location.reload();
 					}
 				);
@@ -291,9 +291,13 @@ require ruta_vista.'seguridad/seguridad/Menu.php';
 
 	function registrarPago(cod, vlrCuota, vlrSaldo)
 	{
+        cuota = cod;
+        vlr_cuota = vlrCuota;
+        vlr_saldo = vlrSaldo;
+
 		$('#pc_prcu_codigo').html(cod);
-		$('#pc_prcu_valor').html(vlrCuota);
-		$('#pc_pres_vlr_saldo').html(vlrSaldo);
+		$('#pc_prcu_valor').html('$'+vlrCuota.toLocaleString());
+		$('#pc_pres_vlr_saldo').html('$'+vlrSaldo.toLocaleString());
 		$('#mdl_pago').modal('show');
 	}
 </script>

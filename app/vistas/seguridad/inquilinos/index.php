@@ -24,7 +24,6 @@
 					<th class="text-center" scope="col">Apellido</th>
 					<th class="text-center" scope="col">Celular</th>
 					<th class="text-center" scope="col">Correo</th>
-					<th class="text-center" scope="col">Base de Datos</th>
 					<th class="text-center" scope="col">Estado</th>
 					<th class="text-center" scope="col">Opciones</th>
 					</tr>
@@ -39,7 +38,6 @@
 						<td><?= $arrDatos['datos']['modelo'][$i]['inqu_apellido'] ?></td>
 						<td><?= $arrDatos['datos']['modelo'][$i]['inqu_celular'] ?></td>
 						<td><?= $arrDatos['datos']['modelo'][$i]['inqu_correo'] ?></td>
-						<td><?= $arrDatos['datos']['modelo'][$i]['inqu_base_datos'] ?></td>
 						<td><?= $arrDatos['datos']['modelo'][$i]['esta_descripcion'] ?></td>
 						<td class="text-center">
 							<a 

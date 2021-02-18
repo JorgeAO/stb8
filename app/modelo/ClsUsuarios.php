@@ -12,7 +12,6 @@ class ClsUsuarios extends Modelo
 		$this->strSentencia = 'select 
 			usua.*, 
 			perf.perf_descripcion, 
-			inqu.inqu_base_datos,
 			esta.esta_descripcion 
 			from tb_seg_usuarios usua 
 			join tb_seg_perfiles perf on (usua.fk_seg_perfiles = perf.perf_codigo) 
