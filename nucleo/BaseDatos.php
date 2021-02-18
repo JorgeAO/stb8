@@ -17,25 +17,13 @@ class BaseDatos
 					'servidor' => 'localhost',
 					'usuario' => 'root',
 					'clave' => '',
-					'bd' => 'bd_base'
+					'bd' => 'bd_smarttrader_v8'
 				],
 				'produccion' => [
 					'servidor' => 'localhost',
 					'usuario' => 'stb8_user',
 					'clave' => 'stb8_2021',
-					'bd' => 'bd_base'
-				],
-				'information_schema' => [
-					'servidor' => 'localhost',
-					'usuario' => 'root',
-					'clave' => '',
-					'bd' => 'information_schema'
-				],
-				'servidor' => [
-					'servidor' => 'localhost',
-					'usuario' => 'root',
-					'clave' => '',
-					'bd' => ''
+					'bd' => 'bd_smarttrader_v8'
 				],
 			];
 
