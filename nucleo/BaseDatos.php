@@ -21,8 +21,8 @@ class BaseDatos
 				],
 				'produccion' => [
 					'servidor' => 'localhost',
-					'usuario' => 'root',
-					'clave' => '',
+					'usuario' => 'stb8_user',
+					'clave' => 'stb8_2021',
 					'bd' => 'bd_base'
 				],
 				'information_schema' => [
@@ -86,7 +86,7 @@ class BaseDatos
 		}
 	}
 
-	public static function arrEjecutarSQL($strSQL, $strEntorno = 'desarrollo')
+	public static function arrEjecutarSQL($strSQL, $strEntorno = 'produccion')
 	{
 		try 
 		{
